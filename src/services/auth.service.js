@@ -18,6 +18,15 @@ const isProfileOwner = async (req, res, next) => {
   next();
 };
 
+const isEducator = async (req, res, next) => {
+  const authorized = req.auth && req.auth.educator;
+  if (!authorized)
+    return res.status(403).json({
+      message: 'User is not an educator',
+    });
+  next();
+};
+
 const createJwt = (user) => {
   const payload = {
     email: user.email,
@@ -26,9 +35,9 @@ const createJwt = (user) => {
   };
   const accessToken = jwt.sign(payload, config.jwtSecret, {
     subject: user._id.toString(),
-    expiresIn: '1d',
+    expiresIn: '3d',
   });
   return accessToken;
 };
 
-module.exports = { createJwt, requireAuth, isProfileOwner };
+module.exports = { createJwt, requireAuth, isProfileOwner, isEducator };

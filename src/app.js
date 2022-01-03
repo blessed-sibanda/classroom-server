@@ -6,6 +6,8 @@ const cors = require('cors');
 
 const authRouter = require('./routes/auth.routes');
 const usersRouter = require('./routes/user.routes');
+const coursesRouter = require('./routes/course.routes');
+const uploadRouter = require('./routes/upload.routes');
 const { connectDb } = require('./helpers/db.helper');
 const config = require('./config');
 
@@ -22,6 +24,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/courses', coursesRouter);
+app.use('/api/upload', uploadRouter);
 
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {

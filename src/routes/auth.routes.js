@@ -16,7 +16,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/me', requireAuth, async (req, res, next) => {
   try {
-    let user = await User.findById(req.auth.sub);
+    let user = await User.findById(req.auth.id);
     res.json(user);
   } catch (err) {
     next(err);

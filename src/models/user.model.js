@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema(
     salt: String,
     educator: {
       type: Boolean,
+
       default: false,
     },
   },
