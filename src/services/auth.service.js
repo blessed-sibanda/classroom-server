@@ -22,6 +22,7 @@ const createJwt = (user) => {
   const payload = {
     email: user.email,
     id: user._id,
+    educator: user.educator,
   };
   const accessToken = jwt.sign(payload, config.jwtSecret, {
     subject: user._id.toString(),

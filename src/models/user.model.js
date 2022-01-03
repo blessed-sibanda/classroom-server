@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Password is required'],
     },
     salt: String,
+    educator: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );
