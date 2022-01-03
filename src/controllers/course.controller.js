@@ -29,3 +29,12 @@ module.exports.create = async (req, res) => {
     return res.status(400).json(formatError(err));
   }
 };
+
+module.exports.getCoursesByInstructor = async (req, res) => {
+  try {
+    let courses = await Course.find({ instructor: req.params.instructorId });
+    res.json(courses);
+  } catch (err) {
+    next(err);
+  }
+};

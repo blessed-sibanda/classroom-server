@@ -6,4 +6,10 @@ const router = Router();
 
 router.post('/', requireAuth, isEducator, courseCtrl.create);
 
+router.get(
+  '/instructor/:instructorId',
+  requireAuth,
+  courseCtrl.getCoursesByInstructor,
+);
+
 module.exports = router;
