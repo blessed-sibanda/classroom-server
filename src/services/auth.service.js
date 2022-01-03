@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
+const User = require('../models/user.model');
 
 const config = require('../config');
 
@@ -19,12 +20,18 @@ const isProfileOwner = async (req, res, next) => {
 };
 
 const isEducator = async (req, res, next) => {
-  const authorized = req.auth && req.auth.educator;
-  if (!authorized)
-    return res.status(403).json({
-      message: 'User is not an educator',
-    });
-  next();
+  console.log('req.auth', req.auth);
+  try {
+    let user = await User.findById(req.auth.id);
+    const authorized = user && user.educator;
+    if (!authorized)
+      return res.status(403).json({
+        message: 'User is not an educator',
+      });
+    next();
+  } catch (err) {
+    next(err);
+  }
 };
 
 const createJwt = (user) => {
