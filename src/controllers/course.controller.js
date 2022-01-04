@@ -115,3 +115,15 @@ module.exports.deleteLesson = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.deleteCourse = async (req, res, next) => {
+  try {
+    let lessonsIds = req.course.lessons.map((l) => l._id.toString());
+    await Lesson.deleteMany({ _id: { $in: lessonsIds } });
+    if (req.course.image) await removeFile(req.course.image);
+    await req.course.remove();
+    res.status(204).json({});
+  } catch (err) {
+    next(err);
+  }
+};

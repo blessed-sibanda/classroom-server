@@ -45,4 +45,12 @@ router.delete(
   courseCtrl.deleteLesson,
 );
 
+router.delete(
+  '/:courseId',
+  requireAuth,
+  isEducator,
+  isCourseOwner,
+  courseCtrl.deleteCourse,
+);
+
 module.exports = router;
