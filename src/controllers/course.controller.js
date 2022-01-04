@@ -1,4 +1,5 @@
 const formidable = require('formidable');
+const merge = require('lodash/merge');
 
 const { uploadSingleFile } = require('../middlewares/upload.middleware');
 const { removeFile } = require('../helpers/upload.helper');
@@ -55,6 +56,45 @@ module.exports.newLesson = async (req, res, next) => {
       { new: true },
     ).populate('instructor', '_id name');
     res.json(result);
+  } catch (err) {
+    res.status(400).json(formatError(err));
+  }
+};
+
+const cleanedCourseData = (course, data) => {
+  delete data._id;
+  delete data.image;
+  delete data.instructor;
+  delete data.lessons;
+
+  return merge(course, data);
+};
+
+module.exports.updateCourse = async (req, res) => {
+  let course = req.course;
+  try {
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+
+    form.parse(req, async (err, fields, files) => {
+      course = cleanedCourseData(course, fields);
+    });
+
+    await uploadSingleFile(req, res);
+
+    if (req.file) {
+      await removeFile(course.image);
+      course.image = req.file.filename;
+    } else {
+      user = cleanedCourseData(course, req.body);
+    }
+
+    await course.save();
+    let updatedCourse = await Course.findById(course._id).populate(
+      'instructor',
+      '_id name',
+    );
+    return res.json(updatedCourse);
   } catch (err) {
     res.status(400).json(formatError(err));
   }

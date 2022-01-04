@@ -21,6 +21,14 @@ router.param('courseId', courseById);
 
 router.get('/:courseId', requireAuth, courseCtrl.read);
 
+router.put(
+  '/:courseId',
+  requireAuth,
+  isEducator,
+  isCourseOwner,
+  courseCtrl.updateCourse,
+);
+
 router.post(
   '/:courseId/lessons',
   requireAuth,
