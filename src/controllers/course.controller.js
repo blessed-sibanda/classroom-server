@@ -72,11 +72,13 @@ const cleanedCourseData = (course, data) => {
 
 module.exports.updateCourse = async (req, res) => {
   let course = req.course;
+  let lessons = [];
   try {
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
 
     form.parse(req, async (err, fields, files) => {
+      if (fields['lessons']) course.lessons = JSON.parse(fields['lessons']);
       course = cleanedCourseData(course, fields);
     });
 
@@ -90,6 +92,7 @@ module.exports.updateCourse = async (req, res) => {
     }
 
     await course.save();
+
     let updatedCourse = await Course.findById(course._id).populate(
       'instructor',
       '_id name',

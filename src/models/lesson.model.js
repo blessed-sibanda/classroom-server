@@ -10,6 +10,9 @@ const lessonSchema = new mongoose.Schema({
     required: 'Lesson content is required',
   },
   resourceUrl: String,
+  order: {
+    type: Number,
+  },
 });
 
 const Lesson = mongoose.model('Lesson', lessonSchema);
