@@ -2,13 +2,12 @@ const Course = require('../models/course.model');
 
 const courseById = async (req, res, next, id) => {
   try {
-    let courses = await Course.find({ _id: id }).populate('instructor', '_id name');
-    console.log(courses[0]);
-    if (courses.length == 0)
+    let course = await Course.findById(id).populate('instructor', '_id name');
+    if (!course)
       return res.status(404).json({
         error: 'Course not found',
       });
-    req.course = courses[0];
+    req.course = course;
     next();
   } catch (err) {
     next(err);

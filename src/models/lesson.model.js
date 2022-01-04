@@ -9,7 +9,7 @@ const lessonSchema = new mongoose.Schema({
     type: String,
     required: 'Lesson content is required',
   },
-  resource_url: String,
+  resourceUrl: String,
 });
 
 const Lesson = mongoose.model('Lesson', lessonSchema);
