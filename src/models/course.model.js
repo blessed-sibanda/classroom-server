@@ -1,13 +1,6 @@
 const mongoose = require('mongoose');
 const config = require('../config');
-
-const lessonSchema = new mongoose.Schema({
-  title: String,
-  content: String,
-  resource_url: String,
-});
-
-const Lesson = mongoose.model('Lesson', lessonSchema);
+const { lessonSchema } = require('./lesson.model');
 
 const courseSchema = new mongoose.Schema(
   {

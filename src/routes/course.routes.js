@@ -1,5 +1,9 @@
 const { Router } = require('express');
-const { requireAuth, isEducator } = require('../services/auth.service');
+const {
+  requireAuth,
+  isEducator,
+  isCourseOwner,
+} = require('../services/auth.service');
 const courseCtrl = require('../controllers/course.controller');
 const { courseById } = require('../middlewares/course.middleware');
 
@@ -16,5 +20,13 @@ router.get(
 router.param('courseId', courseById);
 
 router.get('/:courseId', requireAuth, courseCtrl.read);
+
+router.post(
+  '/:courseId/lessons',
+  requireAuth,
+  isEducator,
+  isCourseOwner,
+  courseCtrl.newLesson,
+);
 
 module.exports = router;

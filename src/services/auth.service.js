@@ -19,8 +19,17 @@ const isProfileOwner = async (req, res, next) => {
   next();
 };
 
+const isCourseOwner = async (req, res, next) => {
+  const authorized =
+    req.course && req.auth && req.course.instructor._id == req.auth.id;
+  if (!authorized)
+    return res.status(403).json({
+      message: 'Only the course owner is authorized to perform this action',
+    });
+  next();
+};
+
 const isEducator = async (req, res, next) => {
-  console.log('req.auth', req.auth);
   try {
     let user = await User.findById(req.auth.id);
     const authorized = user && user.educator;
@@ -47,4 +56,10 @@ const createJwt = (user) => {
   return accessToken;
 };
 
-module.exports = { createJwt, requireAuth, isProfileOwner, isEducator };
+module.exports = {
+  createJwt,
+  requireAuth,
+  isProfileOwner,
+  isEducator,
+  isCourseOwner,
+};
