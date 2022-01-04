@@ -13,3 +13,5 @@ module.exports.create = async (req, res) => {
     res.status(400).json(formatError(err));
   }
 };
+
+module.exports.read = async (req, res) => res.json(req.enrollment);
