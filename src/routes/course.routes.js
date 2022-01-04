@@ -21,7 +21,7 @@ router.get(
 
 router.param('courseId', courseById);
 
-router.get('/:courseId', requireAuth, courseCtrl.read);
+router.get('/:courseId', courseCtrl.read);
 
 router.put(
   '/:courseId',
