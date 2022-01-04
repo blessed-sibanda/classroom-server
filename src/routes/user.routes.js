@@ -4,6 +4,7 @@ const { formatError } = require('../helpers/error.helper');
 const { requireAuth, isProfileOwner } = require('../services/auth.service');
 const { userById, updateUser } = require('../services/user.service');
 const User = require('../models/user.model');
+const Course = require('../models/course.model');
 
 const router = Router();
 
@@ -42,6 +43,7 @@ router.put('/:userId', requireAuth, isProfileOwner, async (req, res) => {
 
 router.delete('/:userId', requireAuth, isProfileOwner, async (req, res) => {
   try {
+    await Course.deleteMany({ instructor: req.profile._id });
     await req.profile.remove();
     res.status(204).json();
   } catch (err) {

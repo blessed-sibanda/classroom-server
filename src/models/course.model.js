@@ -1,6 +1,14 @@
 const mongoose = require('mongoose');
 const config = require('../config');
 
+const lessonSchema = new mongoose.Schema({
+  title: String,
+  content: String,
+  resource_url: String,
+});
+
+const Lesson = mongoose.model('Lesson', lessonSchema);
+
 const courseSchema = new mongoose.Schema(
   {
     name: {
@@ -21,6 +29,8 @@ const courseSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
+    category: String,
+    lessons: [lessonSchema],
   },
   { timestamps: true },
 );

@@ -32,9 +32,15 @@ module.exports.create = async (req, res) => {
 
 module.exports.getCoursesByInstructor = async (req, res) => {
   try {
-    let courses = await Course.find({ instructor: req.params.instructorId });
+    let courses = await Course.find({
+      instructor: req.params.instructorId,
+    }).populate('instructor', '_id name');
     res.json(courses);
   } catch (err) {
     next(err);
   }
+};
+
+module.exports.read = async (req, res) => {
+  res.json(req.course);
 };
