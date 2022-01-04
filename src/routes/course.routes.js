@@ -37,4 +37,12 @@ router.post(
   courseCtrl.newLesson,
 );
 
+router.delete(
+  '/:courseId/lessons/:lessonId',
+  requireAuth,
+  isEducator,
+  isCourseOwner,
+  courseCtrl.deleteLesson,
+);
+
 module.exports = router;

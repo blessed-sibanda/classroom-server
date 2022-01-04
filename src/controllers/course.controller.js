@@ -102,3 +102,16 @@ module.exports.updateCourse = async (req, res) => {
     res.status(400).json(formatError(err));
   }
 };
+
+module.exports.deleteLesson = async (req, res, next) => {
+  try {
+    let course = await Course.findByIdAndUpdate(
+      req.params.courseId,
+      { $pull: { lessons: { _id: req.params.lessonId } } },
+      { new: true },
+    ).populate('instructor', '_id name');
+    res.json(course);
+  } catch (err) {
+    next(err);
+  }
+};
