@@ -11,6 +11,8 @@ const router = Router();
 
 router.post('/', requireAuth, isEducator, courseCtrl.create);
 
+router.get('/', courseCtrl.listPublished);
+
 router.get(
   '/instructor/:instructorId',
   requireAuth,

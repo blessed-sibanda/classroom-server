@@ -127,3 +127,15 @@ module.exports.deleteCourse = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.listPublished = async (req, res, next) => {
+  try {
+    let courses = await Course.find({ published: true }).populate(
+      'instructor',
+      '_id name',
+    );
+    res.json(courses);
+  } catch (err) {
+    next(err);
+  }
+};
