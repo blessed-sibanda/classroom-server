@@ -56,7 +56,8 @@ module.exports.listEnrolled = async (req, res, next) => {
   try {
     let enrollments = await Enrollment.find({ student: req.auth.id })
       .sort({ completed: 1 })
-      .populate('course', '_id name category');
+      .populate('course', '_id name category image imageUrl');
+
     res.json(enrollments);
   } catch (err) {
     next(err);
