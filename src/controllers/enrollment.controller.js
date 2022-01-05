@@ -24,6 +24,11 @@ module.exports.complete = async (req, res, next) => {
       { 'lessonStatus._id': req.params.lessonStatusId },
       { $set: updateData },
     );
+    let enrollment = await Enrollment.findById(req.params.enrollmentId);
+    let complete = enrollment.lessonStatus.every((l) => l.complete);
+    enrollment.completed = complete ? Date.now() : null;
+
+    await enrollment.save();
 
     res.json({});
   } catch (err) {
@@ -39,8 +44,20 @@ module.exports.uncomplete = async (req, res, next) => {
       { 'lessonStatus._id': req.params.lessonStatusId },
       { $set: updateData },
     );
+    await Enrollment.findByIdAndUpdate(req.params.enrollmentId, { completed: null });
 
     res.json({});
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.listEnrolled = async (req, res, next) => {
+  try {
+    let enrollments = await Enrollment.find({ student: req.auth.id })
+      .sort({ completed: 1 })
+      .populate('course', '_id name category');
+    res.json(enrollments);
   } catch (err) {
     next(err);
   }

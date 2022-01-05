@@ -32,4 +32,6 @@ router.delete(
   enrollmentCtrl.uncomplete,
 );
 
+router.get('/', requireAuth, enrollmentCtrl.listEnrolled);
+
 module.exports = router;
