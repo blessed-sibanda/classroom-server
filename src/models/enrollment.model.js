@@ -12,13 +12,14 @@ const enrollmentSchema = new mongoose.Schema(
     },
     lessonStatus: [
       {
-        lesson: [
-          {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Lesson',
-          },
-        ],
-        complete: Boolean,
+        lesson: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Lesson',
+        },
+        complete: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
     completed: Date,

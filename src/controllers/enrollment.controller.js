@@ -15,3 +15,33 @@ module.exports.create = async (req, res) => {
 };
 
 module.exports.read = async (req, res) => res.json(req.enrollment);
+
+module.exports.complete = async (req, res, next) => {
+  try {
+    let updateData = {};
+    updateData['lessonStatus.$.complete'] = true;
+    await Enrollment.updateOne(
+      { 'lessonStatus._id': req.params.lessonStatusId },
+      { $set: updateData },
+    );
+
+    res.json({});
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.uncomplete = async (req, res, next) => {
+  try {
+    let updateData = {};
+    updateData['lessonStatus.$.complete'] = false;
+    await Enrollment.updateOne(
+      { 'lessonStatus._id': req.params.lessonStatusId },
+      { $set: updateData },
+    );
+
+    res.json({});
+  } catch (err) {
+    next(err);
+  }
+};

@@ -20,9 +20,14 @@ const enrollmentById = async (req, res, next, id) => {
     let enrollment = await Enrollment.findById(id)
       .populate({
         path: 'course',
-        populate: { path: 'instructor' },
+        populate: { path: 'instructor', select: '_id name' },
+        select: '-lessons',
       })
-      .populate('student', '_id name');
+      .populate('student', '_id name')
+      .populate({
+        path: 'lessonStatus',
+        populate: { path: 'lesson' },
+      });
 
     if (!enrollment)
       return res.status(404).json({ message: 'Enrollment not found' });
