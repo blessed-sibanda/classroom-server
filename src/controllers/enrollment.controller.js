@@ -14,6 +14,15 @@ module.exports.create = async (req, res) => {
   }
 };
 
+module.exports.delete = async (req, res, next) => {
+  try {
+    await req.enrollment.remove();
+    res.status(204).json({});
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports.read = async (req, res) => res.json(req.enrollment);
 
 module.exports.complete = async (req, res, next) => {
@@ -59,6 +68,36 @@ module.exports.listEnrolled = async (req, res, next) => {
       .populate('course', '_id name category image imageUrl');
 
     res.json(enrollments);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.stats = async (req, res, next) => {
+  try {
+    let stats = {};
+    stats.totalEnrolled = await Enrollment.find({
+      course: req.course._id,
+    }).countDocuments();
+    stats.totalCompleted =
+      stats.totalEnrolled -
+      (await Enrollment.find({
+        course: req.course._id,
+        completed: null,
+      }).countDocuments());
+    res.json(stats);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.isEnrolled = async (req, res, next) => {
+  try {
+    let result = await Enrollment.exists({
+      course: req.course._id,
+      student: req.auth.id,
+    });
+    res.json(result);
   } catch (err) {
     next(err);
   }
